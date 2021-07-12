@@ -1,0 +1,47 @@
+#include "DHT.h"
+#define pino_sinal_analogico A2
+#define DHTPIN A0
+#define DHTTYPE DHT11
+#define LDR A1
+DHT dht(DHTPIN, DHTTYPE);
+int releLED = 13;
+//int LDR = 1;
+int VAL = 0;
+int valor_analogico;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("DHTxx test!");
+  pinMode(LDR,INPUT);
+  pinMode(pino_sinal_analogico, INPUT);
+  dht.begin();
+  pinMode(releLED, OUTPUT);
+}
+void loop() {
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  valor_analogico = analogRead(pino_sinal_analogico);
+  VAL = analogRead(LDR);
+  //if (isnan(t) || isnan(h)) {
+   // delay(500);
+   // Serial.println("Failed to read");
+ // } else {
+  Serial.print("\n");
+  Serial.print(" Umidade: ");
+  Serial.print(h);
+  Serial.print(" %t");
+  Serial.print(" Temperatura: ");
+  Serial.print(t);
+  Serial.println(" *C ");
+  Serial.print(" LUZ: ");
+  Serial.print(VAL);
+  Serial.print("\n Umidade da terra: ");
+  Serial.print(valor_analogico);
+  delay(1500);
+  if(VAL < 300){
+    digitalWrite(releLED, HIGH);
+  } else {
+    digitalWrite(releLED, LOW);
+  }
+  //}
+}
